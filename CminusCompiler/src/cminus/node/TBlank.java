@@ -5,14 +5,14 @@ package cminus.node;
 import cminus.analysis.*;
 
 @SuppressWarnings("nls")
-public final class TInteger extends Token
+public final class TBlank extends Token
 {
-    public TInteger(String text)
+    public TBlank(String text)
     {
         setText(text);
     }
 
-    public TInteger(String text, int line, int pos)
+    public TBlank(String text, int line, int pos)
     {
         setText(text);
         setLine(line);
@@ -22,12 +22,12 @@ public final class TInteger extends Token
     @Override
     public Object clone()
     {
-      return new TInteger(getText(), getLine(), getPos());
+      return new TBlank(getText(), getLine(), getPos());
     }
 
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseTInteger(this);
+        ((Analysis) sw).caseTBlank(this);
     }
 }

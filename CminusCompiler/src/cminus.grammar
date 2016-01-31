@@ -1,18 +1,64 @@
 /* simpleAdder.sable - A very simple program that recognizes two integers being added. */ 
 Package cminus ; 
      
-Helpers 
-    /* Our helpers */ 
-    digit = ['0' .. '9'] ; 
-    sp = ' ' ; 
-    nl = 10 ; 
+Helpers
+ 	all = [0 .. 0xFFFF];  
+    lowercase = ['a' .. 'z'];
+    uppercase = ['A' .. 'Z'];
+    digit = ['0' .. '9'];
+
+    tab = 9;
+    cr = 13; // carriage return
+    lf = 10; //new line
+    eol = cr lf | cr | lf; // End Of Line - This takes care of different platforms
+
+    not_cr_lf = [all - [cr + lf]];
+    not_star = [all - '*'];
+    not_star_slash = [not_star - '/'];
+
+    blank = (' ' | tab | eol)+;
+
+    short_comment = '//' not_cr_lf* eol;
+    long_comment = '/*' not_star* '*'+ (not_star_slash not_star* '*'+)* '/';
+    comment = short_comment | long_comment;
+
+    letter = lowercase | uppercase; 
   
 Tokens 
-    /* Our simple token definition(s). */ 
-    integer = digit+ sp*; 
-    plus = '+' sp*; 
-    semi = ';' nl?; 
+	else = 'else';
+	if = 'if';
+	int = 'int';
+	string = 'string';
+	return = 'return';
+	void = 'void';
+	while = 'while';
+ 	plus = '+';
+ 	minus = '-';
+ 	mult = '*';
+ 	div = '/';
+ 	less = '<';
+ 	lessorequal = '<=';
+ 	greater = '>';
+ 	greaterorequal = '>=';
+ 	equal = '==';
+ 	different = '!=';
+ 	assignment = '=';
+ 	semi = ';';
+ 	colon = ',';
+ 	l_par = '(';
+ 	r_par = ')';
+ 	l_bra = '[';
+ 	r_bra = ']';
+ 	l_cur = '{';
+ 	r_cur = '}';
+    num = digit + digit*;
+    id = letter + letter*;
+    blank = blank;
+    comment = comment;
+    
+Ignored Tokens
+	blank,
+	comment;
   
-Productions 
-    /* Our super-simple grammar */ 
-    program = [left]:integer plus [right]:integer semi;
+Productions //TODO
+    program = [left]:num plus [right]:num semi; 

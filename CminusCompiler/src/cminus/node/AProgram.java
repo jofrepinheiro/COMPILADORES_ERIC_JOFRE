@@ -7,9 +7,9 @@ import cminus.analysis.*;
 @SuppressWarnings("nls")
 public final class AProgram extends PProgram
 {
-    private TInteger _left_;
+    private TNum _left_;
     private TPlus _plus_;
-    private TInteger _right_;
+    private TNum _right_;
     private TSemi _semi_;
 
     public AProgram()
@@ -18,9 +18,9 @@ public final class AProgram extends PProgram
     }
 
     public AProgram(
-        @SuppressWarnings("hiding") TInteger _left_,
+        @SuppressWarnings("hiding") TNum _left_,
         @SuppressWarnings("hiding") TPlus _plus_,
-        @SuppressWarnings("hiding") TInteger _right_,
+        @SuppressWarnings("hiding") TNum _right_,
         @SuppressWarnings("hiding") TSemi _semi_)
     {
         // Constructor
@@ -50,12 +50,12 @@ public final class AProgram extends PProgram
         ((Analysis) sw).caseAProgram(this);
     }
 
-    public TInteger getLeft()
+    public TNum getLeft()
     {
         return this._left_;
     }
 
-    public void setLeft(TInteger node)
+    public void setLeft(TNum node)
     {
         if(this._left_ != null)
         {
@@ -100,12 +100,12 @@ public final class AProgram extends PProgram
         this._plus_ = node;
     }
 
-    public TInteger getRight()
+    public TNum getRight()
     {
         return this._right_;
     }
 
-    public void setRight(TInteger node)
+    public void setRight(TNum node)
     {
         if(this._right_ != null)
         {
@@ -197,7 +197,7 @@ public final class AProgram extends PProgram
         // Replace child
         if(this._left_ == oldChild)
         {
-            setLeft((TInteger) newChild);
+            setLeft((TNum) newChild);
             return;
         }
 
@@ -209,7 +209,7 @@ public final class AProgram extends PProgram
 
         if(this._right_ == oldChild)
         {
-            setRight((TInteger) newChild);
+            setRight((TNum) newChild);
             return;
         }
 

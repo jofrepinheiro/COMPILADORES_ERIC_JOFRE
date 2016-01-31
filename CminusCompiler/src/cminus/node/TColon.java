@@ -5,16 +5,16 @@ package cminus.node;
 import cminus.analysis.*;
 
 @SuppressWarnings("nls")
-public final class TSemi extends Token
+public final class TColon extends Token
 {
-    public TSemi()
+    public TColon()
     {
-        super.setText(";");
+        super.setText(",");
     }
 
-    public TSemi(int line, int pos)
+    public TColon(int line, int pos)
     {
-        super.setText(";");
+        super.setText(",");
         setLine(line);
         setPos(pos);
     }
@@ -22,18 +22,18 @@ public final class TSemi extends Token
     @Override
     public Object clone()
     {
-      return new TSemi(getLine(), getPos());
+      return new TColon(getLine(), getPos());
     }
 
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseTSemi(this);
+        ((Analysis) sw).caseTColon(this);
     }
 
     @Override
     public void setText(@SuppressWarnings("unused") String text)
     {
-        throw new RuntimeException("Cannot change TSemi text.");
+        throw new RuntimeException("Cannot change TColon text.");
     }
 }
