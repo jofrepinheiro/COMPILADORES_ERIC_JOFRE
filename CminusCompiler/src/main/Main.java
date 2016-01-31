@@ -27,7 +27,7 @@ public class Main {
             throw e;
          } 
       } else { 
-         System.err.println("usage: java Cminus inputFile"); 
+         System.err.println("usage: java cminus inputFile"); 
          System.exit(1); 
       } 
    } 

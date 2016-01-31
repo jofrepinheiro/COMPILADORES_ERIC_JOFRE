@@ -36,7 +36,7 @@ public class MyLexer extends Lexer
           token = null; // continue to scan the input.
         else
         { 
-          comment.setText(text.toString()); //TODO entender o que ta rolando aqui
+          comment.setText(text.toString());
           token = comment; //return a comment with the full text.
           state = State.NORMAL; //go back to normal.
           comment = null; // We release this reference.
