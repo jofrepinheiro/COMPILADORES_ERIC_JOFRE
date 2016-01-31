@@ -24,7 +24,8 @@ Helpers
     
 States
   normal,
-  comment; 
+  comment,
+  short_comment; 
   
 Tokens 
 	{normal} else = 'else';
@@ -60,7 +61,7 @@ Tokens
     {normal->comment, comment}
           comment = '/*';
           
-    short_comment = short_comment;
+    {short_comment} short_comment = short_comment;
     
     {comment} comment_end = '*/';
 	{comment} comment_body = [all -['*' + '/']]*;

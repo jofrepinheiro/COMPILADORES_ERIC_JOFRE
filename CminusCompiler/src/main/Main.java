@@ -10,11 +10,11 @@ import cminus.node.Start;
 import cminus.parser.Parser; 
   
 public class Main { 
-   public static void main(String[] args) { 
+   public static void main(String[] args) throws Exception { 
       if (args.length > 0) { 
          try { 
             /* Form our AST */ 
-            Lexer lexer = new Lexer (new PushbackReader( 
+        	 MyLexer lexer = new MyLexer (new PushbackReader( 
                new FileReader(args[0]), 1024)); 
             Parser parser = new Parser(lexer); 
             Start ast = parser.parse() ; 
@@ -24,10 +24,10 @@ public class Main {
             ast.apply(interp) ; 
          } 
          catch (Exception e) { 
-            System.out.println (e) ; 
+            throw e;
          } 
       } else { 
-         System.err.println("usage: java simpleAdder inputFile"); 
+         System.err.println("usage: java Cminus inputFile"); 
          System.exit(1); 
       } 
    } 
