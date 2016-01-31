@@ -4,8 +4,6 @@ package main;
 import java.io.FileReader;
 import java.io.PushbackReader;
 
-import cminus.interpret.Interpreter;
-import cminus.lexer.Lexer;
 import cminus.node.Start;
 import cminus.parser.Parser; 
   
