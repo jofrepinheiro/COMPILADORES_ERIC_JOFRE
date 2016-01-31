@@ -1,4 +1,5 @@
 package main;
+
 import cminus.lexer.Lexer;
 import cminus.node.TComment;
 import cminus.node.TCommentEnd;
@@ -34,7 +35,8 @@ public class MyLexer extends Lexer
         if(count != 0)
           token = null; // continue to scan the input.
         else
-        { comment.setText(text.toString());
+        { 
+          comment.setText(text.toString()); //TODO entender o que ta rolando aqui
           token = comment; //return a comment with the full text.
           state = State.NORMAL; //go back to normal.
           comment = null; // We release this reference.

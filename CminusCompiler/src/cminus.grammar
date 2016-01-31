@@ -59,9 +59,9 @@ Tokens
     {normal} blank = blank;
     
     {normal->comment, comment}
-          comment = '/*';
+          comment = '/*'|'/*';
           
-    {short_comment} short_comment = short_comment;
+    short_comment = short_comment;
     
     {comment} comment_end = '*/';
 	{comment} comment_body = [all -['*' + '/']]*;
