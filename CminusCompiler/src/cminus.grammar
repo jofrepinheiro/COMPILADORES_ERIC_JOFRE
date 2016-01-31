@@ -1,4 +1,3 @@
-/* simpleAdder.sable - A very simple program that recognizes two integers being added. */ 
 Package cminus ; 
      
 Helpers
@@ -19,45 +18,58 @@ Helpers
     blank = (' ' | tab | eol)+;
 
     short_comment = '//' not_cr_lf* eol;
-    long_comment = '/*' not_star* '*'+ (not_star_slash not_star* '*'+)* '/';
-    comment = short_comment | long_comment;
+    //long_comment = '/*' not_star* '*'+ (not_star_slash not_star* '*'+)* '/';
 
-    letter = lowercase | uppercase; 
+    letter = lowercase | uppercase;
+    
+States
+  normal,
+  comment; 
   
 Tokens 
-	else = 'else';
-	if = 'if';
-	int = 'int';
-	string = 'string';
-	return = 'return';
-	void = 'void';
-	while = 'while';
- 	plus = '+';
- 	minus = '-';
- 	mult = '*';
- 	div = '/';
- 	less = '<';
- 	lessorequal = '<=';
- 	greater = '>';
- 	greaterorequal = '>=';
- 	equal = '==';
- 	different = '!=';
- 	assignment = '=';
- 	semi = ';';
- 	colon = ',';
- 	l_par = '(';
- 	r_par = ')';
- 	l_bra = '[';
- 	r_bra = ']';
- 	l_cur = '{';
- 	r_cur = '}';
-    num = digit + digit*;
-    id = letter + letter*;
-    blank = blank;
-    comment = comment;
+	{normal} else = 'else';
+	{normal} if = 'if';
+	{normal} int = 'int';
+	{normal} string = 'string';
+	{normal} return = 'return';
+	{normal} void = 'void';
+	{normal} while = 'while';
+ 	{normal} plus = '+';
+ 	{normal} minus = '-';
+ 	{normal} mult = '*';
+ 	{normal} div = '/';
+ 	{normal} less = '<';
+ 	{normal} lessorequal = '<=';
+ 	{normal} greater = '>';
+ 	{normal} greaterorequal = '>=';
+ 	{normal} equal = '==';
+ 	{normal} different = '!=';
+ 	{normal} assignment = '=';
+ 	{normal} semi = ';';
+ 	{normal} colon = ',';
+ 	{normal} l_par = '(';
+ 	{normal} r_par = ')';
+ 	{normal} l_bra = '[';
+ 	{normal} r_bra = ']';
+ 	{normal} l_cur = '{';
+ 	{normal} r_cur = '}';
+    {normal} num = digit + digit*;
+    {normal} id = letter + letter*;
+    {normal} blank = blank;
+    
+    {normal->comment, comment}
+          comment = '/*';
+          
+    short_comment = short_comment;
+    
+    {comment} comment_end = '*/';
+	{comment} comment_body = [all -['*' + '/']]*;
+	{comment} star = '*';
+	{comment} slash = '/';
     
 Ignored Tokens
 	blank,
+	short_comment,
 	comment;
   
 Productions //TODO

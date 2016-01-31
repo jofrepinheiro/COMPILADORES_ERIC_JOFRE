@@ -178,8 +178,32 @@ class TokenIndex extends AnalysisAdapter
     }
 
     @Override
-    public void caseEOF(@SuppressWarnings("unused") EOF node)
+    public void caseTCommentEnd(@SuppressWarnings("unused") TCommentEnd node)
     {
         this.index = 28;
+    }
+
+    @Override
+    public void caseTCommentBody(@SuppressWarnings("unused") TCommentBody node)
+    {
+        this.index = 29;
+    }
+
+    @Override
+    public void caseTStar(@SuppressWarnings("unused") TStar node)
+    {
+        this.index = 30;
+    }
+
+    @Override
+    public void caseTSlash(@SuppressWarnings("unused") TSlash node)
+    {
+        this.index = 31;
+    }
+
+    @Override
+    public void caseEOF(@SuppressWarnings("unused") EOF node)
+    {
+        this.index = 32;
     }
 }

@@ -44,6 +44,11 @@ public interface Analysis extends Switch
     void caseTId(TId node);
     void caseTBlank(TBlank node);
     void caseTComment(TComment node);
+    void caseTShortComment(TShortComment node);
+    void caseTCommentEnd(TCommentEnd node);
+    void caseTCommentBody(TCommentBody node);
+    void caseTStar(TStar node);
+    void caseTSlash(TSlash node);
     void caseEOF(EOF node);
     void caseInvalidToken(InvalidToken node);
 }

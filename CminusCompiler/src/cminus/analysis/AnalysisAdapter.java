@@ -261,6 +261,36 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
+    public void caseTShortComment(TShortComment node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseTCommentEnd(TCommentEnd node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseTCommentBody(TCommentBody node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseTStar(TStar node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseTSlash(TSlash node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
     public void caseEOF(EOF node)
     {
         defaultCase(node);

@@ -5,16 +5,16 @@ package cminus.node;
 import cminus.analysis.*;
 
 @SuppressWarnings("nls")
-public final class TComment extends Token
+public final class TSlash extends Token
 {
-    public TComment()
+    public TSlash()
     {
-        super.setText("/*");
+        super.setText("/");
     }
 
-    public TComment(int line, int pos)
+    public TSlash(int line, int pos)
     {
-        super.setText("/*");
+        super.setText("/");
         setLine(line);
         setPos(pos);
     }
@@ -22,18 +22,18 @@ public final class TComment extends Token
     @Override
     public Object clone()
     {
-      return new TComment(getLine(), getPos());
+      return new TSlash(getLine(), getPos());
     }
 
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseTComment(this);
+        ((Analysis) sw).caseTSlash(this);
     }
 
     @Override
     public void setText(@SuppressWarnings("unused") String text)
     {
-        throw new RuntimeException("Cannot change TComment text.");
+        throw new RuntimeException("Cannot change TSlash text.");
     }
 }

@@ -242,7 +242,7 @@ public class Parser
 /*      {
 			{{-1, ERROR, 0}, {26, SHIFT, 1}, },
 			{{-1, ERROR, 1}, {7, SHIFT, 3}, },
-			{{-1, ERROR, 2}, {28, ACCEPT, -1}, },
+			{{-1, ERROR, 2}, {32, ACCEPT, -1}, },
 			{{-1, ERROR, 3}, {26, SHIFT, 4}, },
 			{{-1, ERROR, 4}, {18, SHIFT, 5}, },
 			{{-1, REDUCE, 0}, },
