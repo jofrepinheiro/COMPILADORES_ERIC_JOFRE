@@ -63,7 +63,7 @@ Tokens
           
     short_comment = short_comment;
     
-    {comment} comment_end = '*/';
+    comment_end = '*/';
 	{comment} comment_body = [all -['*' + '/']]*;
 	{comment} star = '*';
 	{comment} slash = '/';
@@ -71,7 +71,7 @@ Tokens
 Ignored Tokens
 	blank,
 	short_comment,
-	comment;
+	comment, comment_end, comment_body;
   
 Productions //TODO
     program = [left]:num plus [right]:num semi; 
