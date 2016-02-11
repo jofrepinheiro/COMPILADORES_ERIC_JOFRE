@@ -1,0 +1,12 @@
+[TInt] [TBlank] [TId] [TBlank] [TAssignment] [TBlank] [TNum] [TSemi] [TBlank]
+[TIf] [TLPar] [TId] [TEqual] [TNum] [TRPar] [TLCur] [TBlank]
+[TComment]
+[TBlank]
+[TReturn] [TBlank] [TNum] [TSemi] [TBlank]
+[TRCur] [TElse] [TLCur] [TBlank]
+[TShortComment]
+[TBlank] [TReturn] [TBlank] [TNum] [TSemi] [TBlank]
+[TRCur] [TBlank]
+
+
+
