@@ -14,6 +14,40 @@ public class Main {
             /* Form our AST */ 
         	 MyLexer lexer = new MyLexer (new PushbackReader( 
                new FileReader(args[0]), 1024)); 
+        	 
+        	 while(!lexer.peek().getText().equals("")) 
+	         { 
+        		String token = (lexer.peek().getClass().toString()); 
+        		
+//        		switch (token) {
+//				case "*Num": 
+//					token = "num";
+//					break;
+//				case "*Blank": 
+//					token = "blank";
+//					break;
+//				case "*Plus": 
+//					token = "plus";
+//					break;
+//				case "*TComment": 
+//					token = "comment";
+//					break;
+//				case "*TShortComment": 
+//					token = "shortComment";
+//					break;
+//				case "*Semi": 
+//					token = "semicolon";
+//					break;
+////				case "*Num": 
+////					token = "num";
+////					break;
+//				default:
+//					break;
+//				}
+        		  System.out.println("["+token+"]");
+	          	lexer.next(); 
+	         } 
+
             Parser parser = new Parser(lexer); 
             Start ast = parser.parse() ; 
   
