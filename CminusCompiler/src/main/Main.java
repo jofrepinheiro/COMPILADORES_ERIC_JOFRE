@@ -13,10 +13,14 @@ public class Main {
          try { 
             /* Form our AST */ 
         	 MyLexer lexer = new MyLexer (new PushbackReader( 
-               new FileReader(args[0]), 1024)); 
+               new FileReader(args[0]), 1024));
+        	 while(!lexer.peek().getText().equals("")){ 
+        		 System.out.println(lexer.peek().getClass()); 
+        	     lexer.next(); 
+        	} //Bugado, Consertar.
             Parser parser = new Parser(lexer); 
             Start ast = parser.parse() ; 
-  
+            	
             /* Get our Interpreter going. */ 
             Interpreter interp = new Interpreter () ; 
             ast.apply(interp) ; 
