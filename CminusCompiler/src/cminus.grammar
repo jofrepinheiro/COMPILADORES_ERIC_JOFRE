@@ -54,6 +54,7 @@ Tokens
  	{normal} r_bra = ']';
  	{normal} l_cur = '{';
  	{normal} r_cur = '}';
+ 	(normal) d_quotes = '"';
     {normal} num = digit + digit*;
     {normal} id = letter + letter*;
     {normal} blank = blank;
