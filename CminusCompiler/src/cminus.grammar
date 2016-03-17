@@ -58,6 +58,7 @@ Tokens
     {normal} num = digit + digit*;
     {normal} id = letter + letter*;
     {normal} blank = blank;
+    {normal} teste = 'teste';
     
     {normal->comment, comment}
           comment = '/*'|'/*';
@@ -87,15 +88,21 @@ Productions //TODO
     		{decl_fun} decl_fun;
     					
     decl_var = 
-    		{tipo} tipo id semi;
+    		{tipo} tipovar id semi;
     
-    tipo = 
+    tipovar = 
     		{string_var} string |
     		{int_var} int;
+    		
+   	tipofun = 
+    		{string_fun} string |
+    		{int_fun} int|
+    		{fun_void} teste;
    
    	decl_fun =
-   			{normal_fun} tipo id l_par parametros r_par instrucoes_compostas |
-   			{void_fun} void id l_par parametros r_par instrucoes_compostas;
+   			{normal_fun} tipofun id l_par parametros r_par instrucoes_compostas; 
+   			
+   			//|{void_fun} tipofun id l_par parametros r_par instrucoes_compostas;
    	
    	parametros = 
    			{lista_parametro} lista_parametro|
@@ -106,7 +113,7 @@ Productions //TODO
    			{parametro} parametro;
    	
    	parametro = 
-   			{decl_param} tipo id;
+   			{decl_param} tipovar id;
    	
    	instrucoes_compostas =
    			{lista_instrucoes} l_cur decl_local lista_instrucoes r_cur;
