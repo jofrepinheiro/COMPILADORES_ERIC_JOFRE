@@ -116,7 +116,7 @@ Productions
    			{lista_instrucoes} l_cur decl_local lista_instrucoes r_cur;
    			
    	decl_local =
-   			{declara_var} decl_local decl_var;
+   			{declara_var} decl_local decl_var | ;
    			
    	lista_instrucoes =
    			{instrucoes} lista_instrucoes instrucao |
@@ -188,8 +188,7 @@ Productions
  			{chama_fun} id l_par args r_par;
  			
  	args = 
- 			{com_args} lista_args |
- 			{sem_args} void;
+ 			{com_args} lista_args | ;
  	
  	lista_args =
  			{multi_args} lista_args colon expr |
