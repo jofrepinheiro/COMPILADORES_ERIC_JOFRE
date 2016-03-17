@@ -7,19 +7,24 @@ import java.io.PushbackReader;
 
 import cminus.lexer.Lexer;
 import cminus.lexer.LexerException;
-import cminus.node.PProgram;
 import cminus.node.Start;
 import cminus.node.Token;
 import cminus.parser.Parser;
+import cminus.parser.ParserException;
 
 public class Main {
 	public static void main(String[] args) throws Exception {
 		if (args.length > 0) {
-				/* Form our AST */
-				MyLexer lexer = new MyLexer(new PushbackReader(new FileReader(args[0]), 1024));
-				printTokens(lexer);
+			/* Form our AST */
+			MyLexer lexer = new MyLexer(new PushbackReader(new FileReader(args[0]), 1024));
+			// printTokens(lexer);
+			try {
 				Parser parser = new Parser(lexer);
 				Start start = parser.parse();
+				System.out.println("Sintaxe correta!");
+			} catch (ParserException e) {
+				throw new RuntimeException("Ops, erro de sintaxe.", e);
+			}
 		} else {
 			System.err.println("usage: java cminus inputFile");
 			System.exit(1);
