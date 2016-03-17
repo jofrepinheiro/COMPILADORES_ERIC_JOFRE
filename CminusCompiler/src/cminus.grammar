@@ -112,27 +112,24 @@ Productions //TODO
    			{lista_instrucoes} l_cur decl_local lista_instrucoes r_cur;
    			
    	decl_local =
-   			{declara_var} decl_local decl_var |
-   			{decl_vazia} blank;
+   			{declara_var} decl_local decl_var;
    			
    	lista_instrucoes =
    			{instrucoes} lista_instrucoes instrucao |
-   			{instr_vazia} blank;
+   			{instrucao} instrucao;
    			
    	instrucao = 
    			{inst_expr} inst_expr |
    			{instrucoes_compostas} instrucoes_compostas |   			
-   			{inst_if} inst_if |
+   			{instrucao_if} inst_if |
    			{inst_while} inst_while |
    			{inst_return} inst_return;
     		
 	inst_expr =
-			{expr} expr semi |
-			{semi_colon} semi;
+			{expr} expr semi ;
 			
-	inst_if =
-			{if_sozinho} if l_par expr r_par instrucao |
-			{if_else} if l_par expr r_par instrucao else instrucao;
+	inst_if = {if_sozinho} if l_par expr r_par instrucao else_part;
+	else_part =	{if_else} else instrucao | ;
 			
 	inst_while =  
 			{instrucao_while} while l_par expr r_par instrucao;
@@ -145,7 +142,7 @@ Productions //TODO
 			{expr_simples} expr_simples;
 	
     expr_simples =
-    		{expr_comparacao} expr_soma logic expr_soma |
+    		{expr_comparacao} [first]:expr_soma logic [second]:expr_soma |
     		{expr_soma} expr_soma;
     		
    	logic =
@@ -157,7 +154,7 @@ Productions //TODO
  			{diferente} different;	
  			
  	expr_soma =
- 			{soma} soma_expr soma_op termo |
+ 			{soma} expr_soma soma_op termo |
  			{termo} termo;
  			
  	soma_op =
@@ -183,8 +180,8 @@ Productions //TODO
  			
  	args = 
  			{com_args} lista_args |
- 			{sem_args} blank;
+ 			{sem_args} void;
  	
  	lista_args =
  			{multi_args} lista_args colon expr |
- 			{um_args} expr; 			 	
+ 			{um_args} expr;
