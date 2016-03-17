@@ -122,7 +122,6 @@ Productions //TODO
 		   	{nao_pendente} nao_pendente |
 			{pendente} pendente;  			
     	
-
 	nao_pendente =
 		{ifelse} if l_par expr r_par nao_pendente else [other]:nao_pendente |
 		{inst_expr} inst_expr |
