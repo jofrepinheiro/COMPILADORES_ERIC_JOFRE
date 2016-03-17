@@ -75,7 +75,7 @@ Ignored Tokens
 	short_comment,
 	comment, comment_end, comment_body;
   
-Productions //TODO
+Productions
     program = 
     		{lista_declaracoes} lista_declaracoes;
     		
@@ -95,21 +95,18 @@ Productions //TODO
     		{int_var} int;
     		
    	tipofun = 
-    		{string_fun} string |
-    		{int_fun} int|
-    		{fun_void} teste;
+    		{fun} tipovar |
+    		{fun_void} void;
    
    	decl_fun =
-   			{normal_fun} tipofun id l_par parametros r_par instrucoes_compostas; 
-   			
-   			//|{void_fun} tipofun id l_par parametros r_par instrucoes_compostas;
+   			{normal_fun} tipofun id l_par parametros r_par instrucoes_compostas;
    	
    	parametros = 
    			{lista_parametro} lista_parametro|
    			{void_parametro}  void;
    	
    	lista_parametro = 
-   			{multiparametro} lista_parametro colon parametro|
+   			{multiparametro} lista_parametro colon parametro |
    			{parametro} parametro;
    	
    	parametro = 
