@@ -75,4 +75,116 @@ Ignored Tokens
 	comment, comment_end, comment_body;
   
 Productions //TODO
-    program = [left]:num plus [right]:num semi; 
+    program = 
+    		{lista_declaracoes} lista_declaracoes;
+    		
+    lista_declaracoes = 
+    		{lista_decl} lista_declaracoes declaracao |
+    		{unica_decl} declaracao;
+    
+    declaracao = 
+    		{decl_var} decl_var | 
+    		{decl_fun} decl_fun;
+    					
+    decl_var = 
+    		{tipo} tipo id semi;
+    
+    tipo = 
+    		{string_var} string |
+    		{int_var} int;
+   
+   	decl_fun =
+   			{normal_fun} tipo id l_par parametros r_par instrucoes_compostas |
+   			{void_fun} void id l_par parametros r_par instrucoes_compostas;
+   	
+   	parametros = 
+   			{lista_parametro} lista_parametro|
+   			{void_parametro}  void;
+   	
+   	lista_parametro = 
+   			{multiparametro} lista_parametro colon parametro|
+   			{parametro} parametro;
+   	
+   	parametro = 
+   			{decl_param} tipo id;
+   	
+   	instrucoes_compostas =
+   			{lista_instrucoes} l_cur decl_local lista_instrucoes r_cur;
+   			
+   	decl_local =
+   			{declara_var} decl_local decl_var |
+   			{decl_vazia} blank;
+   			
+   	lista_instrucoes =
+   			{instrucoes} lista_instrucoes instrucao |
+   			{instr_vazia} blank;
+   			
+   	instrucao = 
+   			{inst_expr} inst_expr |
+   			{instrucoes_compostas} instrucoes_compostas |   			
+   			{inst_if} inst_if |
+   			{inst_while} inst_while |
+   			{inst_return} inst_return;
+    		
+	inst_expr =
+			{expr} expr semi |
+			{semi_colon} semi;
+			
+	inst_if =
+			{if_sozinho} if l_par expr r_par instrucao |
+			{if_else} if l_par expr r_par instrucao else instrucao;
+			
+	inst_while =  
+			{instrucao_while} while l_par expr r_par instrucao;
+			
+	inst_return = 
+			{instrucao_return} return expr semi;
+			
+	expr = 
+			{atribuicao} id assignment expr |
+			{expr_simples} expr_simples;
+	
+    expr_simples =
+    		{expr_comparacao} expr_soma logic expr_soma |
+    		{expr_soma} expr_soma;
+    		
+   	logic =
+   			{menor} less |
+ 			{menorigual} lessorequal |
+ 			{maior} greater |
+ 			{maiorigual} greaterorequal |
+ 			{igual} equal |
+ 			{diferente} different;	
+ 			
+ 	expr_soma =
+ 			{soma} soma_expr soma_op termo |
+ 			{termo} termo;
+ 			
+ 	soma_op =
+ 			{plus_op} plus |
+ 			{minus_op} minus;
+ 			
+ 	termo =
+ 			{termo_expr} termo mult_op fator |
+ 			{fator} fator;
+ 			
+ 	mult_op =
+ 			{mult_op} mult |
+ 			{div_op} div;
+ 			
+ 	fator =
+ 			{fator_expr} l_par expr r_par |
+ 			{fator_var} id |
+ 			{chamada_fun} chamada_fun |
+ 			{numero} num;
+ 			
+ 	chamada_fun = 
+ 			{chama_fun} id l_par args r_par;
+ 			
+ 	args = 
+ 			{com_args} lista_args |
+ 			{sem_args} blank;
+ 	
+ 	lista_args =
+ 			{multi_args} lista_args colon expr |
+ 			{um_args} expr; 			 	
