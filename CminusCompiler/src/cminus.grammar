@@ -118,18 +118,24 @@ Productions //TODO
    			{instrucoes} lista_instrucoes instrucao |
    			{instrucao} instrucao;
    			
-   	instrucao = 
-   			{inst_expr} inst_expr |
-   			{instrucoes_compostas} instrucoes_compostas |   			
-   			{instrucao_if} inst_if |
-   			{inst_while} inst_while |
-   			{inst_return} inst_return;
-    		
+   	instrucao =
+		   	{nao_pendente} nao_pendente |
+			{pendente} pendente;  			
+    	
+
+	nao_pendente =
+		{ifelse} if l_par expr r_par nao_pendente else [other]:nao_pendente |
+		{inst_expr} inst_expr |
+		{instrucoes_compostas} instrucoes_compostas |
+		{inst_return} inst_return;
+		
+	pendente =
+		{if_pendente} if l_par expr r_par instrucao |
+		{ifelse_pendente} if l_par expr r_par nao_pendente else pendente |
+		{inst_while} inst_while ;
+		
 	inst_expr =
-			{expr} expr semi ;
-			
-	inst_if = {if_sozinho} if l_par expr r_par instrucao else_part;
-	else_part =	{if_else} else instrucao | ;
+		{expr} expr semi ;
 			
 	inst_while =  
 			{instrucao_while} while l_par expr r_par instrucao;
