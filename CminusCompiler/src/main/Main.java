@@ -21,6 +21,7 @@ public class Main {
 			try {
 				Parser parser = new Parser(lexer);
 				Start start = parser.parse();
+				start.apply(new Printer());
 				System.out.println("Sintaxe correta!");
 			} catch (ParserException e) {
 				throw new RuntimeException("Ops, erro de sintaxe.", e);
