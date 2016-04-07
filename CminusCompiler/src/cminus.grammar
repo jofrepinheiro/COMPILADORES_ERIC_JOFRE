@@ -58,7 +58,7 @@ Tokens
     {normal} num = digit + digit*;
     {normal} id = letter + letter*;
     {normal} blank = blank;
-    {normal} teste = 'teste';
+    {normal} main = 'main';
     
     {normal->comment, comment}
           comment = '/*'|'/*';
@@ -77,7 +77,10 @@ Ignored Tokens
   
 Productions
     program = 
-    		{lista_declaracoes} lista_declaracoes;
+    		{lista_declaracoes} lista_declaracoes decl_main;
+    		
+   	decl_main = 
+   			{main_decl} void main l_par [other]:void r_par instrucoes_compostas; 
     		
     lista_declaracoes = 
     		{lista_decl} lista_declaracoes declaracao |
