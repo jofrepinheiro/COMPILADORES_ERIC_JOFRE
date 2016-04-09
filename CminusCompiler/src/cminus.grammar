@@ -196,3 +196,22 @@ Productions
  	lista_args =
  			{multi_args} lista_args colon expr |
  			{um_args} expr;
+ 			
+ Abstract Syntax Tree
+ 
+ programa = declaracao* main;
+ 
+ main = {main} declaracao* instrucoes*;
+ 
+ declaracao = {funcao} tipo id parametro* instrucao* |
+ 			  {variavel} tipo id;
+ 
+  
+   
+ 
+ expr = {add} [left]:expr [right]:expr
+     | {sub} [left]:expr [right]:expr
+     | {mul} [left]:expr [right]:expr
+     | {div} [left]:expr [right]:expr
+     | {number} number
+     | {function} [name]:identifier [args]:expr*;
