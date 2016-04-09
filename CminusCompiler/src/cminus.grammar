@@ -199,16 +199,29 @@ Productions
  			
  Abstract Syntax Tree
  
- programa = declaracao* main;
+ programa = {programa} declaracao* main;
  
- main = {main} declaracao* instrucoes*;
+ main = {main} declaracao* instrucao*;
+ 
+ variavel = {variavel} tipo id;
  
  declaracao = {funcao} tipo id parametro* instrucao* |
- 			  {variavel} tipo id;
- 
+ 				variavel;
+ 			 
+ parametro = {void} void
+			| {lista} variavel*;
+			
+ instrucao = {if} expr-logica [if-part]:intrucao* [else-part]:instrucao*
+ 			| {return} expr
+ 			| {while} expr-logica instrucao*;
+ 			
+ expr-logica = {menor} expr expr |
+ 			{menorigual} expr expr |
+ 			{maior} expr expr |
+ 			{maiorigual} expr expr |
+ 			{igual} expr expr |
+ 			{diferente} expr expr;
   
-   
- 
  expr = {add} [left]:expr [right]:expr
      | {sub} [left]:expr [right]:expr
      | {mul} [left]:expr [right]:expr
