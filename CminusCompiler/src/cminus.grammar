@@ -34,6 +34,7 @@ Tokens
 	{normal} string = 'string';
 	{normal} return = 'return';
 	{normal} void = 'void';
+	{normal} main = 'main';
 	{normal} while = 'while';
  	{normal} plus = '+';
  	{normal} minus = '-';
@@ -58,7 +59,6 @@ Tokens
     {normal} num = digit + digit*;
     {normal} id = letter + letter*;
     {normal} blank = blank;
-    {normal} main = 'main';
     
     {normal->comment, comment}
           comment = '/*'|'/*';
@@ -196,35 +196,3 @@ Productions
  	lista_args =
  			{multi_args} lista_args colon expr |
  			{um_args} expr;
- 			
- Abstract Syntax Tree
- 
- programa = {programa} declaracao* main;
- 
- main = {main} declaracao* instrucao*;
- 
- variavel = {variavel} tipo id;
- 
- declaracao = {funcao} tipo id parametro* instrucao* |
- 				variavel;
- 			 
- parametro = {void} void
-			| {lista} variavel*;
-			
- instrucao = {if} expr-logica [if-part]:intrucao* [else-part]:instrucao*
- 			| {return} expr
- 			| {while} expr-logica instrucao*;
- 			
- expr-logica = {menor} expr expr |
- 			{menorigual} expr expr |
- 			{maior} expr expr |
- 			{maiorigual} expr expr |
- 			{igual} expr expr |
- 			{diferente} expr expr;
-  
- expr = {add} [left]:expr [right]:expr
-     | {sub} [left]:expr [right]:expr
-     | {mul} [left]:expr [right]:expr
-     | {div} [left]:expr [right]:expr
-     | {number} number
-     | {function} [name]:identifier [args]:expr*;
