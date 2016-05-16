@@ -35,8 +35,6 @@ Tokens
 	{normal} return = 'return';
 	{normal} void = 'void';
 	{normal} main = 'main';
-	{normal} input = 'input';
-	{normal} output = 'output';
 	{normal} while = 'while';
  	{normal} plus = '+';
  	{normal} minus = '-';
@@ -190,9 +188,7 @@ Productions
  			{numero} num;
  			
  	chamada_fun = 
- 			{chama_fun} id l_par args r_par |
- 			{chama_in} input l_par r_par |
- 			{chama_out} output l_par expr r_par;
+ 			{chama_fun} id l_par args r_par;
  			
  	args = 
  			{com_args} lista_args | ;
