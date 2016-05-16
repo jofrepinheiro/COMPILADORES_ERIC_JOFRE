@@ -196,3 +196,79 @@ Productions
  	lista_args =
  			{multi_args} lista_args colon expr |
  			{um_args} expr;
+ 			
+Abstract Syntax Tree
+
+    program = declaracao*; 
+    
+    declaracao = 
+    		{var} decl_var | 
+    		{fun} decl_fun;
+    
+    tipo =  
+    		string |
+    		int |
+    		void;
+    		
+   	decl_var = tipo id;
+   
+   	decl_fun = tipo id parametro* instrucao*;
+   	
+   	parametro = 
+   			{decl_param} tipovar id |
+   			{decl_param_void} void;
+   	
+   	instrucao =
+		{ifelse} expr [true]:instrucao* [false]:instrucao* |
+		{inst_expr} expr |
+		{if_pendente} expr [true]:instrucao |
+		{inst_while} expr instrucao* |
+		{inst_return} expr;
+			
+	expr = 
+			{atribuicao} id assignment expr |
+			{expr_simples} expr_simples;
+	
+    expr_simples =
+    		{expr_comparacao} [first]:expr_soma logic [second]:expr_soma |
+    		{expr_soma} expr_soma;
+    		
+   	logic =
+   			{menor} less |
+ 			{menorigual} lessorequal |
+ 			{maior} greater |
+ 			{maiorigual} greaterorequal |
+ 			{igual} equal |
+ 			{diferente} different;	
+ 			
+ 	expr_soma =
+ 			{soma} expr_soma soma_op termo |
+ 			{termo} termo;
+ 			
+ 	soma_op =
+ 			{plus_op} plus |
+ 			{minus_op} minus;
+ 			
+ 	termo =
+ 			{termo_expr} termo mult_op fator |
+ 			{fator} fator;
+ 			
+ 	mult_op =
+ 			{mult_op} mult |
+ 			{div_op} div;
+ 			
+ 	fator =
+ 			{fator_expr} l_par expr r_par |
+ 			{fator_var} id |
+ 			{chamada_fun} chamada_fun |
+ 			{numero} num;
+ 			
+ 	chamada_fun = 
+ 			{chama_fun} id l_par args r_par;
+ 			
+ 	args = 
+ 			{com_args} lista_args | ;
+ 	
+ 	lista_args =
+ 			{multi_args} lista_args colon expr |
+ 			{um_args} expr;
