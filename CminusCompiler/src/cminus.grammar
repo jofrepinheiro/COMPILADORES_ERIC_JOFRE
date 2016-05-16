@@ -154,10 +154,10 @@ Productions
 			{no_atr_expr} no_atr_expr;
 			
 	no_atr_expr = 
-			{expr_soma} expr_soma |
+			{expr_aritimetica} expr_aritimetica |
 			{expr_logica} expr_logica;
     		
-	expr_logica = [first]:expr_soma logic [second]:expr_soma;
+	expr_logica = [first]:expr_aritimetica logic [second]:expr_aritimetica;
     		
    	logic =
    			{menor} less |
@@ -167,8 +167,8 @@ Productions
  			{igual} equal |
  			{diferente} different;	
  			
- 	expr_soma =
- 			{soma} expr_soma soma_op termo |
+ 	expr_aritimetica =
+ 			{soma} expr_aritimetica soma_op termo |
  			{termo} termo;
  			
  	soma_op =
@@ -207,70 +207,44 @@ Abstract Syntax Tree
     		{var} decl_var | 
     		{fun} decl_fun;
     
-    tipo =  
-    		string |
-    		int |
-    		void;
+    tipo = {string} string |
+    	   {int}	int |
+    	   {void}	void;
     		
    	decl_var = tipo id;
    
    	decl_fun = tipo id parametro* instrucao*;
    	
    	parametro = 
-   			{decl_param} tipovar id |
+   			{decl_param} tipo id |
    			{decl_param_void} void;
    	
    	instrucao =
-		{ifelse} expr [true]:instrucao* [false]:instrucao* |
+		{ifelse} expr_logica [true]:instrucao* [false]:instrucao* |
 		{inst_expr} expr |
-		{if_pendente} expr [true]:instrucao |
-		{inst_while} expr instrucao* |
+		{if_pendente} expr_logica [true]:instrucao* |
+		{inst_while} expr_logica instrucao* |
 		{inst_return} expr;
-			
+		
 	expr = 
-			{atribuicao} id assignment expr |
-			{expr_simples} expr_simples;
-	
-    expr_simples =
-    		{expr_comparacao} [first]:expr_soma logic [second]:expr_soma |
-    		{expr_soma} expr_soma;
+			{atribuicao} id expr | 
+			{expr_aritimetica} expr_aritimetica |
+			{expr_logica} expr_logica;
     		
-   	logic =
-   			{menor} less |
- 			{menorigual} lessorequal |
- 			{maior} greater |
- 			{maiorigual} greaterorequal |
- 			{igual} equal |
- 			{diferente} different;	
+	expr_logica =
+   			{menor} [first]:expr_aritimetica [second]:expr_aritimetica |
+ 			{menorigual} [first]:expr_aritimetica [second]:expr_aritimetica |
+ 			{maior} [first]:expr_aritimetica [second]:expr_aritimetica |
+ 			{maiorigual} [first]:expr_aritimetica [second]:expr_aritimetica |
+ 			{igual} [first]:expr_aritimetica [second]:expr_aritimetica |
+ 			{diferente} [first]:expr_aritimetica [second]:expr_aritimetica;
  			
- 	expr_soma =
- 			{soma} expr_soma soma_op termo |
- 			{termo} termo;
- 			
- 	soma_op =
- 			{plus_op} plus |
- 			{minus_op} minus;
- 			
- 	termo =
- 			{termo_expr} termo mult_op fator |
- 			{fator} fator;
- 			
- 	mult_op =
- 			{mult_op} mult |
- 			{div_op} div;
- 			
- 	fator =
- 			{fator_expr} l_par expr r_par |
- 			{fator_var} id |
- 			{chamada_fun} chamada_fun |
- 			{numero} num;
- 			
- 	chamada_fun = 
- 			{chama_fun} id l_par args r_par;
- 			
- 	args = 
- 			{com_args} lista_args | ;
- 	
- 	lista_args =
- 			{multi_args} lista_args colon expr |
- 			{um_args} expr;
+ 	expr_aritimetica
+        = {add} [first]:expr_aritimetica [second]:expr_aritimetica
+        | {sub} [first]:expr_aritimetica [second]:expr_aritimetica
+        | {mult} [first]:expr_aritimetica [second]:expr_aritimetica
+        | {div} [first]:expr_aritimetica [second]:expr_aritimetica
+        | {variavel}  id
+        | {numero} num
+        | {expr} expr
+        | {chamada_fun} id expr*;
