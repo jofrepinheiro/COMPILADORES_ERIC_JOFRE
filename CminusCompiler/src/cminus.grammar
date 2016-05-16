@@ -130,32 +130,34 @@ Productions
 			{pendente} pendente;  			
     	
 	nao_pendente =
-		{ifelse} if l_par expr r_par nao_pendente else [other]:nao_pendente |
+		{ifelse} if l_par expr_logica r_par nao_pendente else [other]:nao_pendente |
 		{inst_expr} inst_expr |
 		{instrucoes_compostas} instrucoes_compostas |
 		{inst_return} inst_return;
 		
 	pendente =
-		{if_pendente} if l_par expr r_par instrucao |
-		{ifelse_pendente} if l_par expr r_par nao_pendente else pendente |
+		{if_pendente} if l_par expr_logica r_par instrucao |
+		{ifelse_pendente} if l_par expr_logica r_par nao_pendente else pendente |
 		{inst_while} inst_while ;
 		
 	inst_expr =
 		{expr} expr semi ;
 			
 	inst_while =  
-			{instrucao_while} while l_par expr r_par instrucao;
+			{instrucao_while} while l_par expr_logica r_par instrucao;
 			
 	inst_return = 
 			{instrucao_return} return expr semi;
 			
 	expr = 
 			{atribuicao} id assignment expr |
-			{expr_simples} expr_simples;
-	
-    expr_simples =
-    		{expr_comparacao} [first]:expr_soma logic [second]:expr_soma |
-    		{expr_soma} expr_soma;
+			{no_atr_expr} no_atr_expr;
+			
+	no_atr_expr = 
+			{expr_soma} expr_soma |
+			{expr_logica} expr_logica;
+    		
+	expr_logica = [first]:expr_soma logic [second]:expr_soma;
     		
    	logic =
    			{menor} less |
