@@ -30,10 +30,10 @@ States
 Tokens 
 	{normal} else = 'else';
 	{normal} if = 'if';
-	{normal} int = 'int';
-	{normal} string = 'string';
+	{normal} kw_int = 'int';
+	{normal} kw_string = 'string';
 	{normal} return = 'return';
-	{normal} void = 'void';
+	{normal} kw_void = 'void';
 	{normal} main = 'main';
 	{normal} while = 'while';
  	{normal} plus = '+';
@@ -76,155 +76,150 @@ Ignored Tokens
 	comment, comment_end, comment_body;
   
 Productions
-    program = 
-    		{lista_declaracoes} lista_declaracoes decl_main;
+    program {->program} = 
+    		lista_declaracoes decl_main
+    		{-> New program([lista_declaracoes.declaracao], decl_main.declaracao)};
     		
-   	decl_main = 
-   			{main_decl} void main l_par [other]:void r_par instrucoes_compostas; 
+   	decl_main {->declaracao} = 
+   			{main_decl} [first]:kw_void main l_par [second]:kw_void r_par [bloco]:instrucoes_compostas
+   			{-> New declaracao.main_fun(bloco.instrucoes_compostas)}; 
     		
-    lista_declaracoes = 
-    		{lista_decl} lista_declaracoes declaracao |
-    		{unica_decl} declaracao;
+    lista_declaracoes {->declaracao*} = 
+    		{lista_decl} [rest]:lista_declaracoes declaracao {-> [declaracao, rest.declaracao]} |
+    		{unica_decl} declaracao {-> [declaracao]};
     
-    declaracao = 
-    		{decl_var} decl_var | 
-    		{decl_fun} decl_fun;
+    declaracao {-> declaracao} = 
+    		{decl_var} decl_var {-> decl_var.declaracao}| 
+    		{decl_fun} decl_fun {-> decl_fun.declaracao};
     					
-    decl_var = 
-    		{tipo} tipovar id semi;
+    decl_var {-> declaracao} = 
+    		{tipo} tipovar id semi 
+    		{->New declaracao.var(tipovar.tipo,id)};
     
-    tipovar = 
-    		{string_var} string |
-    		{int_var} int;
+    tipovar {->tipo} = 
+    		{string_var} kw_string {-> New tipo.string(kw_string) } |
+    		{int_var} kw_int {-> New tipo.int(kw_int) };
     		
-   	tipofun = 
-    		{fun} tipovar |
-    		{fun_void} void;
+   	tipofun {->tipo} = 
+    		{fun} tipovar {->tipovar.tipo} |
+    		{fun_void} kw_void {->New tipo.void(kw_void)};
    
-   	decl_fun =
-   			{normal_fun} tipofun id l_par parametros r_par instrucoes_compostas;
+   	decl_fun {-> declaracao} =
+   			{normal_fun} tipofun id l_par parametros r_par [bloco]:instrucoes_compostas
+   			{-> New declaracao.fun(tipofun.tipo,id,[parametros.parametro],bloco.instrucoes_compostas)};
    	
-   	parametros = 
-   			{lista_parametro} lista_parametro|
-   			{void_parametro}  void;
+   	parametros {->parametro*} = 
+   			{lista_parametro} lista_parametro {->[lista_parametro.parametro]}|
+   			{void_parametro}  kw_void {->[New parametro.decl_param_void(kw_void)]};
    	
-   	lista_parametro = 
-   			{multiparametro} lista_parametro colon parametro |
-   			{parametro} parametro;
+   	lista_parametro {->parametro*} = 
+   			{multiparametro} [rest]:lista_parametro colon parametro {-> [parametro, rest.parametro]} |
+   			{parametro} parametro {-> [parametro]};
    	
-   	parametro = 
-   			{decl_param} tipovar id;
+   	parametro {->parametro} = 
+   			{decl_param} tipovar id {->New parametro.decl_param(tipovar.tipo,id)};
    	
-   	instrucoes_compostas =
-   			{lista_instrucoes} l_cur decl_local lista_instrucoes r_cur;
+   	instrucoes_compostas {->instrucoes_compostas} =
+   			{lista_instrucoes} l_cur decl_local lista_instrucoes r_cur
+   			{->New instrucoes_compostas([decl_local.declaracao],[lista_instrucoes.instrucao])};
    			
-   	decl_local =
-   			{declara_var} decl_local decl_var | ;
+   	decl_local {->declaracao*} =
+   			{multiple} [rest]:decl_local decl_var {-> [decl_var.declaracao, rest.declaracao] } |
+   			{single} decl_var {-> [decl_var.declaracao] };
    			
-   	lista_instrucoes =
-   			{instrucoes} lista_instrucoes instrucao |
-   			{instrucao} instrucao;
+   	lista_instrucoes {->instrucao*} =
+   			{instrucoes} [rest]:lista_instrucoes instrucao {-> [instrucao, rest.instrucao] } |
+   			{instrucao} instrucao {-> [instrucao] };
    			
-   	instrucao =
-		   	{nao_pendente} nao_pendente |
-			{pendente} pendente;  			
+   	instrucao {->instrucao} =
+		   	{nao_pendente} [nao_pend]:nao_pendente {->nao_pend.instrucao} |
+			{pendente} [pend]:pendente {->pend.instrucao} ;  			
     	
-	nao_pendente =
-		{ifelse} if l_par expr_logica r_par nao_pendente else [other]:nao_pendente |
-		{inst_expr} inst_expr |
-		{instrucoes_compostas} instrucoes_compostas |
-		{inst_return} inst_return;
+	nao_pendente {->instrucao} =
+		{ifelse} if l_par expr_logica r_par [first]:nao_pendente else [second]:nao_pendente {-> New instrucao.ifelse(expr_logica,first.instrucao, second.instrucao)} |
+		{inst_expr} [inst]:inst_expr {-> inst.instrucao } |
+		{inst_return} [inst]:inst_return {-> inst.instrucao };
 		
-	pendente =
-		{if_pendente} if l_par expr_logica r_par instrucao |
-		{ifelse_pendente} if l_par expr_logica r_par nao_pendente else pendente |
-		{inst_while} inst_while ;
+	pendente {->instrucao} =
+		{if_pendente} if l_par expr_logica r_par instrucao {->New instrucao.if_pendente(expr_logica,instrucao)} |
+		{ifelse_pendente} if l_par expr_logica r_par nao_pendente else pendente {-> New instrucao.ifelse(expr_logica,nao_pendente.instrucao, pendente.instrucao)} |
+		{inst_while} [inst]:inst_while {-> inst.instrucao } ;
 		
-	inst_expr =
-		{expr} expr semi ;
+	inst_expr {->instrucao} =
+		{expr} expr semi {-> New instrucao.inst_expr(expr)};
 			
-	inst_while =  
-			{instrucao_while} while l_par expr_logica r_par instrucao;
+	inst_while {->instrucao} =  
+			{instrucao_while} while l_par expr_logica r_par instrucao {-> New instrucao.inst_while(expr_logica,instrucao)};
 			
-	inst_return = 
-			{instrucao_return} return expr semi;
+	inst_return {->instrucao} = 
+			{instrucao_return} return expr semi {-> New instrucao.inst_return(expr)} ;
 			
-	expr = 
-			{atribuicao} id assignment expr |
-			{no_atr_expr} no_atr_expr;
+	expr {->expr} = 
+			{atribuicao} id assignment [expression]:expr {-> New expr.atribuicao(id,expression.expr)} |
+			{no_atr_expr} no_atr_expr {-> no_atr_expr.expr};
 			
-	no_atr_expr = 
-			{expr_aritimetica} expr_aritimetica |
-			{expr_logica} expr_logica;
+	no_atr_expr {->expr} = 
+			{expr_aritimetica} [expressao]:expr_aritimetica {->New expr.expr_aritimetica(expressao)} |
+			{expr_logica} [expressao]:expr_logica {->New expr.expr_logica(expressao)};
     		
-	expr_logica = [first]:expr_aritimetica logic [second]:expr_aritimetica;
-    		
-   	logic =
-   			{menor} less |
- 			{menorigual} lessorequal |
- 			{maior} greater |
- 			{maiorigual} greaterorequal |
- 			{igual} equal |
- 			{diferente} different;	
+	expr_logica {->expr_logica} = {less} [first]:expr_aritimetica less [second]:expr_aritimetica {-> New expr_logica.menor(first.expr_aritimetica, second.expr_aritimetica)} |
+				{lessorequal} [first]:expr_aritimetica lessorequal [second]:expr_aritimetica {-> New expr_logica.menorigual(first.expr_aritimetica, second.expr_aritimetica)} |
+				{greater} [first]:expr_aritimetica greater [second]:expr_aritimetica {-> New expr_logica.maior(first.expr_aritimetica, second.expr_aritimetica)} |
+				{greaterorequal} [first]:expr_aritimetica greaterorequal [second]:expr_aritimetica {-> New expr_logica.maiorigual(first.expr_aritimetica, second.expr_aritimetica)} |
+				{equal} [first]:expr_aritimetica equal [second]:expr_aritimetica {-> New expr_logica.igual(first.expr_aritimetica, second.expr_aritimetica)} |
+				{different} [first]:expr_aritimetica different [second]:expr_aritimetica {-> New expr_logica.diferente(first.expr_aritimetica, second.expr_aritimetica)};
  			
- 	expr_aritimetica =
- 			{soma} expr_aritimetica soma_op termo |
- 			{termo} termo;
+ 	expr_aritimetica {->expr_aritimetica} =
+ 			{soma} [first]:expr_aritimetica plus termo {-> New expr_aritimetica.add(first.expr_aritimetica,termo.expr_aritimetica)} |
+ 			{subtracao} [first]:expr_aritimetica minus termo {-> New expr_aritimetica.sub(first.expr_aritimetica,termo.expr_aritimetica)} |
+ 			{termo} termo {->termo.expr_aritimetica};
  			
- 	soma_op =
- 			{plus_op} plus |
- 			{minus_op} minus;
+ 	termo {->expr_aritimetica} =
+ 			{termo_expr_mult} termo mult fator {-> New expr_aritimetica.mult(termo.expr_aritimetica,fator.expr_aritimetica)}|
+ 			{termo_expr_div} termo div fator {-> New expr_aritimetica.div(termo.expr_aritimetica,fator.expr_aritimetica)}|
+ 			{fator} fator {->fator.expr_aritimetica};
  			
- 	termo =
- 			{termo_expr} termo mult_op fator |
- 			{fator} fator;
+ 	fator {->expr_aritimetica} =
+ 			{fator_expr} l_par [expressao]:expr r_par {-> New expr_aritimetica.expr(expressao.expr)} |
+ 			{fator_var} id {-> New expr_aritimetica.variavel(id)}|
+ 			{chamada_fun} chamada_fun {-> chamada_fun.expr_aritimetica }|
+ 			{numero} num {-> New expr_aritimetica.numero(num)};
  			
- 	mult_op =
- 			{mult_op} mult |
- 			{div_op} div;
+ 	chamada_fun {->expr_aritimetica} = 
+ 			{chama_fun} id l_par args r_par {-> New expr_aritimetica.chamada_fun(id,[args.expr])};
  			
- 	fator =
- 			{fator_expr} l_par expr r_par |
- 			{fator_var} id |
- 			{chamada_fun} chamada_fun |
- 			{numero} num;
- 			
- 	chamada_fun = 
- 			{chama_fun} id l_par args r_par;
- 			
- 	args = 
- 			{com_args} lista_args | ;
+ 	args {-> expr*} = 
+ 			{com_args} lista_args {-> [lista_args.expr]};
  	
- 	lista_args =
- 			{multi_args} lista_args colon expr |
- 			{um_args} expr;
+ 	lista_args {-> expr*} =
+ 			{multi_args} [rest]:lista_args colon expr  {-> [expr, rest.expr]}|
+ 			{um_args} expr {-> [expr]};
  			
 Abstract Syntax Tree
 
-    program = declaracao*; 
+    program = declaracao* [main]:declaracao; 
     
     declaracao = 
-    		{var} decl_var | 
-    		{fun} decl_fun;
+    		{var} tipo id | 
+    		{fun} tipo id parametro* instrucoes_compostas |
+    		{main_fun} instrucoes_compostas;
     
-    tipo = {string} string |
-    	   {int}	int |
-    	   {void}	void;
-    		
-   	decl_var = tipo id;
-   
-   	decl_fun = tipo id parametro* instrucao*;
-   	
+    tipo = {string} kw_string |
+    	   {int}	kw_int |
+    	   {void}	kw_void;
+    			
    	parametro = 
    			{decl_param} tipo id |
-   			{decl_param_void} void;
+   			{decl_param_void} kw_void;
    	
    	instrucao =
-		{ifelse} expr_logica [true]:instrucao* [false]:instrucao* |
+		{ifelse} expr_logica [true]:instrucao [false]:instrucao |
 		{inst_expr} expr |
-		{if_pendente} expr_logica [true]:instrucao* |
-		{inst_while} expr_logica instrucao* |
+		{if_pendente} expr_logica [true]:instrucao |
+		{inst_while} expr_logica instrucao |
 		{inst_return} expr;
+		
+	instrucoes_compostas = declaracao* instrucao*;
 		
 	expr = 
 			{atribuicao} id expr | 
@@ -244,7 +239,7 @@ Abstract Syntax Tree
         | {sub} [first]:expr_aritimetica [second]:expr_aritimetica
         | {mult} [first]:expr_aritimetica [second]:expr_aritimetica
         | {div} [first]:expr_aritimetica [second]:expr_aritimetica
-        | {variavel}  id
+        | {variavel} id
         | {numero} num
         | {expr} expr
         | {chamada_fun} id expr*;
