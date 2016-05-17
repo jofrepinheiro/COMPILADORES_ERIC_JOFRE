@@ -120,7 +120,7 @@ Productions
    			{decl_param} tipovar id {->New parametro.decl_param(tipovar.tipo,id)};
    	
    	instrucoes_compostas {->instrucoes_compostas} =
-   			{lista_instrucoes} l_cur decl_local lista_instrucoes r_cur
+   			{lista_instrucoes} l_cur decl_local? lista_instrucoes r_cur
    			{->New instrucoes_compostas([decl_local.declaracao],[lista_instrucoes.instrucao])};
    			
    	decl_local {->declaracao*} =
@@ -189,12 +189,12 @@ Productions
  			{chama_fun} id l_par args r_par {-> New expr_aritimetica.chamada_fun(id,[args.expr])};
  			
  	args {-> expr*} = 
- 			{com_args} lista_args {-> [lista_args.expr]};
+ 			{com_args} lista_args? {-> [lista_args.expr]};
  	
  	lista_args {-> expr*} =
  			{multi_args} [rest]:lista_args colon expr  {-> [expr, rest.expr]}|
  			{um_args} expr {-> [expr]};
- 			
+ 			 			
 Abstract Syntax Tree
 
     program = declaracao* [main]:declaracao; 
